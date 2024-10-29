@@ -1,0 +1,287 @@
+<html>
+  <head>
+    <title>My A-Frame Scene</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  </head>
+
+  <body>
+    <a-scene>
+      <a-entity camera look-controls position="0 -3 0">
+        <a-cursor
+          id="cursor"
+          color="black"
+          fuse="true"
+          fuse-timeout="4000"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+        ></a-cursor>
+      </a-entity>
+
+      <a-entity
+        id="reset-button"
+        position="3 0 -4"
+        geometry="primitive: box; height: .5; width: 1; depth: 0.1"
+        material="color: blue"
+        class="gazeable"
+        visible="true"
+      >
+        <a-text
+          value="Reset"
+          color="#FFFFFF"
+          position="-.05 -.05 0.1"
+          align="center"
+        ></a-text>
+      </a-entity>
+
+      <!-- create the six walls of our scene, four sides floor and ceiling --->
+      <a-entity position="0 0 0">
+        <a-plane
+          position="0 0 5"
+          rotation="0 180 0"
+          height="10"
+          width="10"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/IMG_2801.jpg?v=1730131527922"
+          repeat="1 1"
+        ></a-plane>
+        <a-plane
+          position="0 0 -5"
+          rotation="0 0 0"
+          height="10"
+          width="10"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/3.png?v=1730135452940"
+          repeat="1 1"
+        ></a-plane>
+        <a-plane
+          position="5 0 0"
+          rotation="0 -90 0"
+          height="10"
+          width="10"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/IMG_2802.jpg?v=1730131530107"
+          repeat="1 1"
+        ></a-plane>
+        <a-plane
+          position="-5 0 0"
+          rotation="0 90 0"
+          height="10"
+          width="10"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/IMG_2800.jpg?v=1730131524942"
+          repeat="1 1"
+        ></a-plane>
+        <a-plane
+          position="0 -5 0"
+          rotation="-90 0 0"
+          height="10"
+          width="10"
+          color="#161C1C"
+        ></a-plane>
+        <a-plane
+          position="0 5 0"
+          rotation="90 0 0"
+          height="10"
+          width="10"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/Sky_image.jpeg?v=1729537149093"
+          repeat="1 1"
+        ></a-plane>
+      </a-entity>
+
+      <!-- Create the three intital route boxes for the user to choose which one they would like to complete-->
+      <a-entity
+        id="route1"
+        position="-2 -2 -4"
+        geometry="primitive: box; height: 1; width: 1.5; depth: .2"
+        material="color: orange"
+        class="gazeable"
+        visible="true"
+      ></a-entity>
+      <a-text
+        id="route1-text"
+        value="Route 1"
+        color="#000000"
+        position="-1.8 -2.1 -3.6"
+        align="center"
+      ></a-text>
+
+      <a-entity
+        id="route2"
+        position="0 -2 -4"
+        geometry="primitive: box; height: 1; width: 1.5; depth: .2"
+        material="color: pink"
+        class="gazeable"
+        visible="true"
+      ></a-entity>
+      <a-text
+        id="route2-text"
+        value="Route 2"
+        color="#000000"
+        position="0 -2.1 -3.6"
+        align="center"
+      ></a-text>
+
+      <a-entity
+        id="route3"
+        position="2 -2 -4"
+        geometry="primitive: box; height: 1; width: 1.5; depth: .2"
+        material="color: white"
+        class="gazeable"
+        visible="true"
+      ></a-entity>
+      <a-text
+        id="route3-text"
+        value="Route 3"
+        color="#000000"
+        position="1.8 -2.1 -3.6"
+        align="center"
+      ></a-text>
+
+      <!-- Import hand images for left and right hand placement -->
+      <a-assets>
+        <img
+          id="left"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/L.png?v=1730159015474"
+        />
+      </a-assets>
+
+      <a-assets>
+        <img
+          id="right"
+          src="https://cdn.glitch.global/2459ab6b-be79-43ab-884c-d90ba21e245e/R.png?v=1730159022018"
+        />
+      </a-assets>
+    </a-scene>
+
+    <script>
+      // Separate arrays of new objects for each route
+      const newObjectsRoute1 = [
+        { position: "-1.9 -3 -3", src: "#left" },
+        { position: "-1.6 -3 -3", src: "#right" },
+        { position: "-0.6 -2.2 -3", src: "#right" },
+        { position: "-0.9 -1.6 -3", src: "#left" },
+        { position: "-1.6 -1 -3", src: "#right" },
+        { position: "-1.9 -0.3 -3", src: "#left" },
+        { position: "-1.2 0.5 -3", src: "#right" },
+        { position: "-2 1.1 -3", src: "#left" },
+        { position: "-2.1 1.1 -3", src: "#right" },
+      ];
+
+      const newObjectsRoute2 = [
+        { position: "-2.1 -2.2 -3", src: "#right" },
+        { position: "-1.8 -2 -3", src: "#left" },
+        { position: "-0.9 -1 -3", src: "#right" },
+        { position: "-1.1 -1 -3", src: "#left" },
+        { position: "-0.5 -0.9 -3", src: "#left" },
+        { position: "0.65 -1 -3", src: "#right" },
+        { position: "0.55 -1 -3", src: "#left" },
+        { position: "1.1 -.4 -3", src: "#right" },
+        { position: "0.95 0.05 -3", src: "#left" },
+        { position: "1 0.05 -3", src: "#right" },
+      ];
+
+      const newObjectsRoute3 = [
+        { position: "0.2 -2.3 -3", src: "#left" },
+        { position: "1.2 -2.3 -3", src: "#right" },
+        { position: "1.3 -1.5 -3", src: "#right" },
+        { position: "1.0.5 -0.9 -3", src: "#left" },
+        { position: "1.2 -0.9 -3", src: "#right" },
+        { position: "1.4 -0.1 -3", src: "#right" },
+        { position: "0.7 0.1 -3", src: "#left" },
+        { position: "0.7 0.9 -3", src: "#right" },
+        { position: "0.6 0.9 -3", src: "#left" },
+      ];
+
+      let currentObjectIndex = 0;
+      let currentNewObjects = [];
+
+      // Function to handle gaze on current object
+      function handleGaze(event) {
+        const targetBoxId = event.target.id;
+
+        // Set the newObjects based on which box was gazed at
+        if (targetBoxId === "route1") {
+          currentNewObjects = newObjectsRoute1;
+        } else if (targetBoxId === "route2") {
+          currentNewObjects = newObjectsRoute2;
+        } else if (targetBoxId === "route3") {
+          currentNewObjects = newObjectsRoute3;
+        }
+
+        // Hide the current gazable boxes
+        const boxes = document.querySelectorAll(".gazeable:not(#reset-button)");
+        boxes.forEach((box) => {
+          box.setAttribute("visible", "false");
+          // Remove event listeners to deactivate the boxes
+          box.removeEventListener("mouseenter", handleGaze);
+          // Hide associated text
+          const textId = box.id + "-text";
+          const textElement = document.getElementById(textId);
+          if (textElement) {
+            textElement.setAttribute("visible", "false");
+          }
+        });
+
+        // Display the new objects sequentially
+        displayNewObjects();
+      }
+
+      // Function to display new objects
+      function displayNewObjects() {
+        if (currentObjectIndex < currentNewObjects.length) {
+          const obj = currentNewObjects[currentObjectIndex];
+          //const newBox = document.createElement('a-entity');
+          //newBox.setAttribute('geometry', 'primitive: sphere; radius: 0.2');
+          //newBox.setAttribute('material', `color: ${obj.color}`);
+          const newBox = document.createElement("a-image");
+          newBox.setAttribute("src", obj.src);
+          newBox.setAttribute("height", (height = ".5"));
+          newBox.setAttribute("width", (width = ".5"));
+          newBox.setAttribute("position", obj.position);
+          newBox.setAttribute("class", "gazeable");
+          newBox.setAttribute("visible", "true");
+
+          // Add gaze event listener to the new object
+          newBox.addEventListener("mouseenter", handleGaze);
+
+          // Add the new object to the scene
+          document.querySelector("a-scene").appendChild(newBox);
+
+          // Increment the index for the next gaze
+          currentObjectIndex++;
+        }
+      }
+
+      function resetScene() {
+        // Reset logic goes here
+        currentObjectIndex = 0;
+        currentNewObjects = [];
+        // Make all routes visible again
+        const boxes = document.querySelectorAll(".gazeable:not(#reset-button)");
+        boxes.forEach((box) => {
+          box.setAttribute("visible", "true");
+
+          const textId = box.id + "-text";
+          const textElement = document.getElementById(textId);
+          if (textElement) {
+            textElement.setAttribute("visible", "true");
+          }
+          box.addEventListener("mouseenter", handleGaze);
+        });
+
+        // Optionally, remove any displayed objects from previous routes
+        const displayedObjects = document.querySelectorAll("a-image");
+        displayedObjects.forEach((obj) => obj.remove());
+        
+        const resetButton = document.getElementById('reset-button');
+        if (resetButton) {
+            resetButton.setAttribute('visible', 'true');
+          }
+      }
+
+      // Add gaze event listeners to each initial box
+      document.querySelectorAll(".gazeable").forEach((box) => {
+        box.addEventListener("mouseenter", handleGaze);
+      });
+      
+      const resetButton = document.getElementById('reset-button');
+      resetButton.addEventListener('mouseenter', resetScene);                                           
+                                                
+    </script>
+  </body>
+</html>
